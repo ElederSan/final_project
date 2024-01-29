@@ -24,39 +24,79 @@ st.title("Real-Time Dashboard")
 # review_date = st.selectbox("Select the status", pd.unique(data["review_date"]))
 # Assuming data is your DataFrame
 # Assuming data is your DataFrame
-review_date_options = pd.unique(data["review_date"])
-
-# Add a "Clear Selection" option to the list of unique values
-review_date_options = ['Clear Selection'] + list(review_date_options)
-
-# Display the select box
+# Top-level filters
+review_date_options = ['Clear Selection'] + list(pd.unique(data["review_date"]))
 review_date = st.selectbox("Select the date", review_date_options)
 
 # Check if the user selected "Clear Selection"
 if review_date == 'Clear Selection':
-    # Handle the case where the user wants to clear the selection
     st.info("Selection cleared. No specific date filter applied.")
 else:
-    # Handle the case where a specific status is selected
-    st.success(f"Filtering by status: {review_date}")
-    # Continue with the rest of your code based on the selected filter
+    # Filter data based on the selected review date
+    filtered_data = data[data["review_date"] == review_date]
+    st.success(f"Filtering by date: {review_date}")
 
-st.write(data.head())
+# create columns              
+kpi1, kpi2 = st.columns(2)                
+
+# fill the column with respect to the KPIs
+num_reviews = data['review_id'].nunique()      
+#kpi1.metric         
+kpi1 = st.metric(
+    label="Number of reviews",
+    value=num_reviews,
+    delta=num_reviews - 10
+)         
+
+# kpi2.metric           
+kpi2 = st.metric(
+    label="Number of reviews",
+    value=num_reviews,
+    delta=num_reviews - 10
+)            
+
 
 # create columns for the chars             
-# create columns for the chars             
+# create columns for the chars   
+
+data['review_date'] = pd.to_datetime(data['review_date'])
+reviews_per_date = data.groupby('review_date').size().reset_index(name='num_reviews')
+
+avg_rating_per_month = (
+    data.groupby(data['review_date'].dt.to_period("M"))['review_rating']
+    .mean()
+    .round(1)
+    .reset_index())
+
+# Convert 'review_date' to datetime
+avg_rating_per_month['review_date'] = pd.to_datetime(avg_rating_per_month['review_date'].astype(str))
+
+# Sort the DataFrame by 'review_date' in chronological order
+avg_rating_per_month = avg_rating_per_month.sort_values('review_date')
+
+# Convert 'review_date' back to string for plotting (optional)
+avg_rating_per_month['review_date'] = avg_rating_per_month['review_date'].dt.strftime('%Y-%m')
+
+
 fig_col1, fig_col2 = st.columns(2)                           
 
 
 with fig_col1:                  
-    st.markdown (“### Chart 1”)                     
-    fig1 = px.density_heatmap                     
-    {             
-    data_frame = df, y =”status_drinking_new”, x = “drinking_habits”            
-    }                
-    st.write(fig)            
+    st.markdown ("### Chart 1")                     
+    fig1= px.line(reviews_per_date, x='review_date', y='num_reviews', markers=True, line_shape='linear')
+    fig1.update_layout(title_text='Number of Reviews per Review Date',
+    xaxis_title='Review Date',
+    yaxis_title='Number of Reviews',
+    showlegend=False)            
+    st.write(fig1)            
 
 with fig_col2:                    
-    st.markdown (“### Chart 2”)          
-    fig2 = px.histogram (data_frame = df, x =”status_drinking_new”)                
-    st.write(fig2)                        
+    st.markdown ("### Chart 2")          
+    fig2 = px.line(avg_rating_per_month, x='review_date', y='review_rating', markers=True, line_shape='linear')
+    fig2.update_layout(title_text='Average review rating per month',
+    xaxis_title='Review Date',
+    yaxis_title='Avg review rating per month',
+    showlegend=False)          
+    st.write(fig2)                
+
+

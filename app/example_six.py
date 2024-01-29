@@ -90,7 +90,7 @@ def scrape_trustpilot_reviews(url, from_page, to_page):
     return df
 
 # Streamlit setup
-st.title("Trustpilot Review Scraper")
+st.title("Sentiment comparison tool")
 
 # File upload using Streamlit's file_uploader
 

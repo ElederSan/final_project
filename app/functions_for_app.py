@@ -4,7 +4,11 @@ from bs4 import BeautifulSoup
 import requests
 from datetime import datetime
 import re
+import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.style.use("ggplot")
 
 # Function to scrape Trustpilot reviews
 @st.cache_data
@@ -86,7 +90,7 @@ def scrape_trustpilot_reviews(url, from_page, to_page):
     return df
 
 # Streamlit setup
-st.title("Trustpilot Review Scraper")
+st.title("Sentiment comparison tool")
 
 # File upload using Streamlit's file_uploader
 
@@ -97,42 +101,26 @@ from_page = st.sidebar.number_input("From Page", min_value=1, value=1)
 to_page = st.sidebar.number_input("To Page", min_value=from_page, value=from_page)
 
 # Button to trigger scraping function
-if st.sidebar.button("Scrape Trustpilot Reviews"):
-    st.info("Scraping in progress. Please wait...")
+import requests
+
+try:
+    if st.sidebar.button("Scrape Trustpilot Reviews"):
+        st.info("Scraping in progress. Please wait...")
         
-    # Call the scraping function with user input
-    scraped_data = scrape_trustpilot_reviews(url, from_page, to_page)
-    # Display the scraped data outside the if block
-    #st.header("Scraped Data")
-    st.write(scraped_data)  # This line might need to be adjusted based on the structure of your code
-    st.success("Scraping completed successfully!")
-else:
-    st.warning("Please provide a valid url or upload a CSV file .")
+        # Call the scraping function with user input
+        scraped_data = scrape_trustpilot_reviews(url, from_page, to_page)
+        
+        if scraped_data.empty:
+            st.warning("No data could be scraped. Please provide a valid URL or upload a CSV file.")
+        else:
+            # Display the scraped data outside the if block
+            st.header('Scraped Data')
+            st.write(scraped_data)  # This line might need to be adjusted based on the structure of your code
+            st.success("Scraping completed successfully!")
 
-uploaded_file = st.file_uploader('Upload your file here')
+    else:
+        st.warning("Please provide a valid URL on the side scraping paramenters or upload a CSV file.")
 
-if uploaded_file:
-    #st.header('Data Statistics')
-    df = pd. read_csv(uploaded_file)
-
-    st.write(df.describe())
-
-    #st.header('Data Header')
-    st.write(df.head())
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
-
-    # Plotting the first subplot
-    ax1.plot(df['review_date'], df['review_rating'])
-    ax1.set_xlabel('review_date')
-    ax1.set_ylabel('review_rating')
-    ax1.set_title('First Subplot')
-
-    # Plotting the second subplot
-    ax2.plot(df['review_date'], df['review_rating'])
-    ax2.set_xlabel('review_date')
-    ax2.set_ylabel('review_rating')
-    ax2.set_title('Second Subplot')
-
-    # Display the figure in Streamlit
-    st.pyplot(fig)
+except requests.exceptions.ConnectionError:
+    st.warning("Connection error. Please check your internet connection and try again.")
+    st.warning("Alternatively, input a valid URL or upload a CSV file.")

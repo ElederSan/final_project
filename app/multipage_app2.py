@@ -27,13 +27,15 @@ with st.echo("below"):
     show_pages(
         [
             Page("multipage_app2.py", "Home", "🏠"),
-            Page("example_one.py", "About us", ":books:"),
-            Page("example_two.py", "Pricing", "📖"),
-            Page("example_three.py", "Example Three", "✏️"),
+            Page("example_one.py", "Why sentiment analysis"),
+            Page("example_two.py", "Pricing"),
+            Page("example_three.py", "Example Three"),
             Page("example_three.py"),
-            Page("example_four.py", "Example Four", "✏️"),
-            Page("example_five.py", "Example Five", "🧰"),
-            Page("example_six.py", "Testing page", "🧰"),
+            #Page("example_five.py", "Benchmarkt"),
+            Page("example_six.py", "Benchmarkt"),
+            Page("example_seven.py", "Performance Dashboard"),
+            Page("example_four.py", "Help us to help you!"),
+            Page("example_eight.py", "Sentiment comparison"),
         ]
     )
 
