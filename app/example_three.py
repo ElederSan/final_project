@@ -18,7 +18,7 @@ def get_data(file_path):
 data = get_data("expondo_reviews_since_2023.csv")
 
 # dashboard title                   
-st.title("Real-Time Dashboard")
+#st.title("Real-Time Dashboard")
 
 # top-level filters          
 # review_date = st.selectbox("Select the status", pd.unique(data["review_date"]))

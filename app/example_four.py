@@ -1,20 +1,65 @@
 import streamlit as st
 from st_pages import add_page_title, hide_pages
+import streamlit as st
+import pandas as pd
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-add_page_title()
+# Sample DataFrame
+data = {
+    'Review': ['Great product!', 'Not satisfied with the service.', 'Average experience.',
+               'Amazing support!', 'Could be better.'],
+    'Sentiment': ['','','','','']  # Initialize with empty strings
+}
 
-st.write("This is just a sample page!")
+df = pd.DataFrame(data)
 
-selection = st.radio(
-    "Test page hiding",
-    ["Show all pages", "Hide pages 1 and 2", "Hide Other apps Section"],
-)
+# Streamlit app
+st.header('Review Sentiment Analyzer')
 
-if selection == "Show all pages":
-    hide_pages([])
-elif selection == "Hide pages 1 and 2":
-    hide_pages(["Example One", "Example Two"])
-elif selection == "Hide Other apps Section":
-    hide_pages(["Other apps"])
+# Function to send emails
+def send_email(reviews):
+    # Configure your email server details
+    email_address = 'your_email@gmail.com'
+    password = 'your_email_password'
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email_address, password)
 
-st.selectbox("test_select", options=["1", "2", "3"])
+    # Email content
+    subject = 'User Feedback'
+    body = '\n'.join([f"{i + 1}. {review}" for i, review in enumerate(reviews)])
+
+    msg = MIMEMultipart()
+    msg['From'] = email_address
+    msg['To'] = 'destination_email@example.com'  # Replace with your destination email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Send email
+    server.sendmail(email_address, msg['To'], msg.as_string())
+    server.quit()
+
+# Display reviews with horizontal radio buttons for sentiment selection
+for i in range(5):
+    st.subheader(f'Review {i + 1}: {df["Review"][i]}')
+    sentiment_options = ['😃 positive', '😐 neutral', '😟 negative']
+    selected_sentiment = st.radio(f'Select sentiment for Review {i + 1}:', sentiment_options, key=f'sentiment_{i}')
+    sentiments_mapping = {'😃 positive': 'positive', '😐 neutral': 'neutral', '😟 negative': 'negative'}
+    df.at[i, 'Sentiment'] = sentiments_mapping[selected_sentiment]
+
+# Button to submit and send email
+if st.button('Submit Feedback'):
+    st.write('Sending feedback...')
+    selected_reviews = df[df['Sentiment'] != '']['Review'].tolist()
+    if selected_reviews:
+        send_email(selected_reviews)
+        st.success('Feedback submitted successfully!')
+    else:
+        st.warning('Please select sentiments for all reviews before submitting.')
+
+# Display the DataFrame
+#st.dataframe(df)
+
+

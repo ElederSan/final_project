@@ -89,8 +89,6 @@ def scrape_trustpilot_reviews(url, from_page, to_page):
     df = pd.DataFrame(data)
     return df
 
-# Streamlit setup
-st.title("Sentiment comparison tool")
 
 # File upload using Streamlit's file_uploader
 
@@ -124,3 +122,30 @@ try:
 except requests.exceptions.ConnectionError:
     st.warning("Connection error. Please check your internet connection and try again.")
     st.warning("Alternatively, input a valid URL or upload a CSV file.")
+
+
+def get_sentiment(row):
+    if pd.notna(row['review_rating']) and row['review_rating'] != '':
+        try:
+            rating = int(row['review_rating'])
+            if rating == 1 or rating == 2:
+                return "negative"
+            elif rating == 3:
+                return "neutral"
+            elif rating == 4 or rating == 5:
+                return "positive"
+        except ValueError:
+            pass
+
+    if 'review_content' in row.index and pd.notna(row['review_content']):
+        # If review_rating is empty or not a valid integer, use TextBlob for sentiment analysis
+        analysis = TextBlob(row['review_content'])
+        if analysis.sentiment.polarity > 0:
+            return "positive"
+        elif analysis.sentiment.polarity < 0:
+            return "negative"
+        else:
+            return "neutral"
+    
+    # If none of the conditions are met, return None or any default value
+    return None

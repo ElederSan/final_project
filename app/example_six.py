@@ -90,7 +90,7 @@ def scrape_trustpilot_reviews(url, from_page, to_page):
     return df
 
 # Streamlit setup
-st.title("Sentiment comparison tool")
+#st.title("Sentiment comparison tool")
 
 # File upload using Streamlit's file_uploader
 
@@ -114,7 +114,6 @@ try:
             st.warning("No data could be scraped. Please provide a valid URL or upload a CSV file.")
         else:
             # Display the scraped data outside the if block
-            st.header('Scraped Data')
             st.write(scraped_data)  # This line might need to be adjusted based on the structure of your code
             st.success("Scraping completed successfully!")
 

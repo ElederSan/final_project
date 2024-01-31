@@ -16,6 +16,7 @@ from nltk.corpus import stopwords
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
 from wordcloud import WordCloud
+from functions_for_app import *
 
 plt.style.use("ggplot")
 #######################################
@@ -23,8 +24,8 @@ plt.style.use("ggplot")
 #######################################
 
 st.set_page_config(page_title="Sales Dashboard", page_icon=":bar_chart:", layout="wide")
-
-st.title("Expondo Review dashboard")
+st.image("Logo.jpg", width=300)
+#st.title("Expondo Review dashboard")
 #st.markdown("_Prototype v0.4.1_")
 
 #with st.sidebar:
@@ -40,12 +41,15 @@ st.title("Expondo Review dashboard")
 # DATA LOADING
 #######################################
 
+
+
 @st.cache_data
 def load_data(path: str):
     df = pd.read_csv(path)
     return df
 
 df = load_data("expondo_reviews_since_2023.csv")
+df['sentiment'] = df.apply(get_sentiment, axis=1)
 df['review_date'] = pd.to_datetime(df['review_date'])
 df['month_year'] = df['review_date'].dt.to_period("M")
 df['month_year_str'] = df['month_year'].dt.strftime('%Y-%m')
@@ -62,8 +66,8 @@ df_merged.rename(columns={'Alpha-3 code': 'country_iso3'}, inplace=True)
 df = df_merged.drop_duplicates()
 df = df.reset_index()
 
-with st.expander("Data Preview"):
-    st.dataframe(df)
+
+
 
 #######################################
 # VISUALIZATION METHODS
@@ -196,7 +200,7 @@ def create_metric_card(column, label, value, delta=None):
 # Function to generate all metric cards
 def plot_metric_cards(df):
       
-    avg_rating = df['review_rating'].mean().round(2)
+    avg_rating = round(df['review_rating'].mean(),2)
     num_reviews = int(df["review_id"].nunique())
     avg_reviews_day = round(float(df["review_id"].nunique())/int(df['review_date'].nunique()),2)
     total_countries=int(df["review_location"].nunique())
@@ -312,6 +316,25 @@ def plot_wordcloud_negative():
 
 #plot_wordcloud_negative()
 
+def plot_donut():
+    sentiment_counts = df['sentiment'].value_counts()
+    total_reviews = len(df)
+    sentiment_percentages = pd.DataFrame(round((sentiment_counts / total_reviews) * 100))
+    sentiment_percentages = sentiment_percentages.reset_index()
+    sentiment_percentages = sentiment_percentages.rename({'count': 'percentage'})
+    fig = px.pie(sentiment_percentages, values='count', names='sentiment', color='sentiment', hole=0.3,
+                 color_discrete_map= {'positive': 'green', 'neutral': 'yellow', 'negative': 'red'},
+                 title="Percentage per sentiment",
+    )
+    fig.update_layout(
+    showlegend=True,
+    legend=dict(orientation="h", yanchor="top", y=1.1, xanchor="left", x=0),
+    xaxis=dict(showgrid=False),
+    yaxis=dict(showgrid=False),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+
 #######################################
 # STREAMLIT LAYOUT
 #######################################
@@ -332,7 +355,7 @@ with third_left_column:
     plot_gauge(df, rating_column='review_rating')
 
 with third_right_column:
-    plot_gauge(df, rating_column='review_rating') # to be replaced by pie chart
+    plot_donut()
 
 with fourth_left_column:
    plot_location_avg_review()
@@ -346,5 +369,7 @@ with fifth_left_column:
 with fifth_right_column:
     plot_wordcloud_negative()
 
+with st.expander("Data Preview"):
+    st.dataframe(df)
 
 
