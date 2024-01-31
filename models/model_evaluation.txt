@@ -1,0 +1,21 @@
+I have chosed to use 3 different models for the project of sentiment analysis:
+
+- Textblob
+- Vader
+- Naive Bayes
+
+I have processed all this models in 3-4 different alternatives each:
+
+1. Raw data, incluying uncleaned data (including, emojis, punctuation, exclamation marks, etc.) on Vader and Texblob, as they apparently perfom better, since they are able to recognize emotions out of the characters.
+2. Clean data without balancing (clear 46 % data inbalance) for the positive reviews.
+3. Clean and balanced data for the Naives Bayes model
+4. Combination of title and review content to provide more content for the analysis.
+
+The Naive Bayes has been trained with a dataset obtained from scraping Truspilot and 2 available dataset from Kaggle, training with 12 K reviews.
+
+Out of all the modelling we got the best results with the Naive Bayes and only analysing the review_content. This gave us 68,76 % performance.
+The best performance with the Textblob or Vader was 65%
+
+I add the 2 notebooks with the models having the best performance.
+
+The rest of the alternatives can be found on the folder further_modelin_ notebooks
