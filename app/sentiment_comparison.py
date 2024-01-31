@@ -338,7 +338,7 @@ with col3:
     'powerhouse': df_company2,
     'steel_supply': df_company3,
     'dm_tools': df_company4,
-    'Company5': df_company5,
+    'tool_rep': df_company5,
     }
     
     selected_company = st.sidebar.selectbox('Select Company', list(company_dataframes.keys()), index=0)
