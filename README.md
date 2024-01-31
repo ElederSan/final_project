@@ -34,7 +34,7 @@ We use different datasets scraped from Trustpilot (only for learning purposes)
 ### 5. Delivery and Return Analysis
 - Examine sentiments related to delivery and return experiences.
 
-### App features:
+## App features:
 
 - App contains a performance dashboard, containing the breakdown of reviews for the specific company, in this case Expondo (my company)
 - It also has a sentiment comparison tool, which allows to compare side by side the performance between our customer and the main competitors. This tool works dynamically,allowing to scrape reviews from other competitors or upload a csv file with reviews from other tools.
