@@ -1,0 +1,16 @@
+- csv files obtained from the process of data cleaning:
+
+data_uncleaned.csv - data contains emojis, special characters, etc. Some models, such as Vader and Textblob are able to recognize symbols, capitales,etc, apparently provide better performance without data preprocessing.
+df_premodel.csv - data cleaned but inbalanced, with 46% for positive reviews
+data_resampled.csv - data cleaned and balanced via oversampling.
+
+- csv files for the data training modelling. 
+
+We get following files from scraping and available kaggle datasets, to achieve 30 K records, which will help us get enough examples to train the sentiments.
+
+bank_reviews.csv
+trust_pilot_reviews_data_2022_06.csv
+ASOS_Trustpilot_13.csv
+amazon_neutral.csv
+mowdirect_neutral.xlsx
+expondo_reviews_since_2023.csv
