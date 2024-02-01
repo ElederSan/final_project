@@ -42,11 +42,11 @@ We use different datasets scraped from Trustpilot (only for learning purposes)
 
 ## Business Questions
 
-1.How is customer satisfaction trending based on review ratings and sentiments?
-2.What are the geographical variations in average ratings and sentiments?
-3. Which sentiments are commonly associated with specific products in customer reviews?
-4. What is the overall sentiment regarding delivery services, and are there country-specific patterns?
-5. How does our average review rating compare with competitors in the industry?
+- How is customer satisfaction trending based on review ratings and sentiments?
+- What are the geographical variations in average ratings and sentiments?
+- Which sentiments are commonly associated with specific products in customer reviews?
+- What is the overall sentiment regarding delivery services, and are there country-specific patterns?
+- How does our average review rating compare with competitors in the industry?
 
 
 ## How to Use
