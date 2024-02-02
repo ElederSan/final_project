@@ -52,17 +52,19 @@ for i in range(5):
     sentiments_mapping = {'😃 positive': 'positive', '😐 neutral': 'neutral', '😟 negative': 'negative'}
     df.at[i, 'Sentiment'] = sentiments_mapping[selected_sentiment]
 
-# Button to submit and send email
+#Button to submit and send email
 if st.button('Submit Feedback'):
-    st.write('Sending feedback...')
-    selected_reviews = df[df['Sentiment'] != '']['review_content'].tolist()
-    if selected_reviews:
+   st.write('Sending feedback...')
+    #selected_reviews = df[df['Sentiment'] != '']['review_content'].tolist()
+   selected_reviews = df.dropna(subset=['Sentiment'])['review_content'].tolist()
+   if selected_reviews:
         send_email(selected_reviews)
         st.success('Feedback submitted successfully!')
         st.success('Remember, La kappa te CAPA.')  # Display the additional message
-    else:
-        st.warning('Please select sentiments for all reviews before submitting.')
+else:
+    st.warning('Please select sentiments for all reviews before submitting.')
+
 
 # Display the DataFrame
-#st.dataframe(df)
+st.dataframe(df)
 
