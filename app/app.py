@@ -1,59 +1,138 @@
+from pathlib import Path
+from turtle import width
 import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
+from st_pages import Page, add_page_title, show_pages, show_pages_from_config
 
-# First tab
+st.image("Logo.jpg", width=300)
 
-# Your main content goes here...
-# Create a selectbox to choose between tabs
-selected_tab = st.sidebar.radio("Select Tab", ["About us", "Sentiment what is","Pricing","Company performance","Benchmark",])
 
-# Conditionally show content based on the selected tab
-if selected_tab == "About us":
-    st.title('Tab 1:Trustpilot review and sentiment analysis')
-    st.text('This is a web app to explore the sentiment. ')
+top_row = st.container()
+second_row = st.container()
+third_row = st.container()
+fourth_row = st.container()
+fifth_row = st.container()
 
-    uploaded_file = st.file_uploader('Upload your file here')
 
-    if uploaded_file:
-        st.header('Data Statistics')
-        df = pd. read_csv(uploaded_file, sep=';')
+with top_row:
+    st.image("blank_space.jpg",width=600)
+    st.image("who_are_we.jpg",width=1900)
+    st.image("blank_space.jpg",width=600)
+with second_row:
+    st.image("powering.jpg",width=1900)
+    st.image("blank_space.jpg",width=600)
+    st.image("ironsentiment_offer.jpg",width = 1900)
+with third_row:
+    st.image("blank_space.jpg",width =600)
+with fourth_row:
+    st.image("blank_space.jpg",width =1900)
+    st.image("questions_to_answer.jpg",width=1900)
 
-        st.write(df.describe())
-
-        st.header('Data Header')
-        st.write(df.head())
-
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
-
-        # Plotting the first subplot
-        ax1.plot(df['review_date'], df['review_rating'])
-        ax1.set_xlabel('review_date')
-        ax1.set_ylabel('review_rating')
-        ax1.set_title('First Subplot')
-
-        # Plotting the second subplot
-        ax2.plot(df['review_date'], df['review_rating'])
-        ax2.set_xlabel('review_date')
-        ax2.set_ylabel('review_rating')
-        ax2.set_title('Second Subplot')
-
-        # Display the figure in Streamlit
-        st.pyplot(fig)
+with fifth_row:
+    st.image("blank_space.jpg",width=1900)
+    st.image("blank_space.jpg",width=1900)
+    st.image("blank_space.jpg",width=1900)
+    st.image("blank_space.jpg",width=1900)
+    st.image("blank_space.jpg",width=1900)
+    st.image("blank_space.jpg",width=1900)
 
 
 
-elif selected_tab == "Sentiment what is":
-    st.title("Tab 2: Additional Content")
-    # Additional content for Tab 2...
-
-elif selected_tab == "Pricing":
-    st.title("Tab 3: Additional Content")
-    # Additional content for Tab 2...
-
-elif selected_tab == "Benchmark":
-    st.title("Tab 4: More Content")
-    # More content for Tab 3...
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Add a header with text and a button
+#st.write("Welcome to my multipage app!")
+
+
+
+# Your existing code for declaring pages
+with st.echo("below"):
+    from st_pages import Page, add_page_title, show_pages
+
+    #"## Declaring the pages in your app:"
+    show_pages(
+        [
+            Page("app.py", "Home"),
+            Page("why_sentiment.py", "Why sentiment analysis"),
+            Page("pricing.py", "Pricing"),
+            #Page("example_three.py", "Example Three"),
+            #Page("example_three.py"),
+            #Page("example_five.py", "Benchmarkt"),
+            #Page("example_six.py", "Benchmarkt"),
+            Page("performance_dashboard.py", "Performance Dashboard"),
+            Page("sentiment_comparison.py", "Sentiment comparison"),
+            Page("help_us.py", "Help us to help you!"),
+        ]
+    )
